@@ -30,6 +30,11 @@ Aligner/
 │   ├── aligner_base_test.sv
 │   ├── aligner_reg_access_test.sv
 │   ├── aligner_test_pkg.sv
+│   ├── apb_agent.sv
+│   ├── apb_agent_config.sv
+│   ├── apb_if.sv
+│   ├── apb_pkg.sv
+│   ├── apb_types.sv
 │   └── testbench.sv
 └── .git/
 ```
@@ -52,12 +57,18 @@ The design is composed of several modules that collectively implement the aligne
 
 The verification environment is centered around UVM and is staged under [verif](verif):
 
-- [verif/testbench.sv](verif/testbench.sv): top-level testbench with clock/reset generation and DUT instantiation
+- [verif/testbench.sv](verif/testbench.sv): top-level testbench with clock/reset generation, DUT instantiation, and APB interface hookup
+- [verif/apb_if.sv](verif/apb_if.sv): APB interface used to connect the testbench to the DUT
+- [verif/apb_pkg.sv](verif/apb_pkg.sv): package containing the APB interface and APB agent-related definitions
+- [verif/apb_agent_config.sv](verif/apb_agent_config.sv): configuration component used to hold the APB virtual interface
+- [verif/apb_agent.sv](verif/apb_agent.sv): APB agent instantiated inside the environment
 - [verif/aligner_pkg.sv](verif/aligner_pkg.sv): UVM package for the design environment
-- [verif/aligner_env.sv](verif/aligner_env.sv): environment component scaffold
+- [verif/aligner_env.sv](verif/aligner_env.sv): environment component scaffold with APB agent creation
 - [verif/aligner_base_test.sv](verif/aligner_base_test.sv): base UVM test
-- [verif/aligner_reg_access_test.sv](verif/aligner_reg_access_test.sv): a placeholder test for register access validation
+- [verif/aligner_reg_access_test.sv](verif/aligner_reg_access_test.sv): placeholder test for register access validation
 - [verif/aligner_test_pkg.sv](verif/aligner_test_pkg.sv): package that includes the UVM test classes
+
+The APB interface is passed to the agent through `uvm_config_db`, which is the standard UVM mechanism for sharing virtual interface references between testbench components.
 
 ## Functional Behavior
 
@@ -79,7 +90,7 @@ The register model described in the RTL comments includes registers such as:
 
 ## Simulation / Build Status
 
-This project is in a RTL + UVM scaffold stage. The source and verification files are present, but the verification environment is still relatively minimal and will need additional agent, monitor, scoreboard, and sequence development to become a complete testbench.
+This project is in a RTL + UVM scaffold stage. The APB interface, configuration component, and agent instance are now in place, and the environment is beginning to model a realistic verification hierarchy. The project still needs additional monitor, driver, sequence, and scoreboard development to become a complete verification environment.
 
 ## Typical Simulation Flow
 
@@ -108,8 +119,9 @@ The exact command syntax may vary depending on the simulator being used (e.g. Qu
 ## Next Recommended Improvements
 
 - add a formal build script or Makefile
-- create a deeper verification hierarchy with agent/driver/monitor/scoreboard
-- add a real register model and functional stimulus tests
+- create a deeper verification hierarchy with driver, monitor, sequencer, and scoreboard
+- implement a simple APB transaction sequence and test stimulus
+- replace the placeholder register-access test with real register-level checks
 - document the exact simulator commands for the target toolchain
 - add coverage and regression execution steps
 

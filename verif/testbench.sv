@@ -12,7 +12,9 @@ module testbench();
   import aligner_test_pkg::*;
   
   reg clk;		// Clock
-  reg rst_n; 	// Reset active low 
+  
+  // Instance of the APB interface
+  apb_if apb_if(.pclk(clk));
   
   initial begin : clock_generator
     clk = 0;
@@ -23,20 +25,31 @@ module testbench();
   end
   
   initial begin : reset_generator
-    rst_n = 1;
+    apb_if.preset_n = 1;
     #6ns;
-    rst_n = 0;
+    apb_if.preset_n = 0;
     #30ns;
-    rst_n = 1;
+    apb_if.preset_n = 1;
   end
   
   // Instantiate aligner module
   cfs_aligner dut(
     .clk	(clk),
-    .reset_n(rst_n)
+    .reset_n(apb_if.preset_n),
+    .paddr(apb_if.paddr),
+    .pwrite(apb_if.pwrite),
+    .psel(apb_if.psel),
+    .penable(apb_if.penable),
+    .pwdata(apb_if.pwdata),
+    .pready(apb_if.pready),
+    .prdata(apb_if.prdata),
+    .pslverr(apb_if.pslverr)
   );
   
   initial begin : start_uvm_test
+    
+    uvm_config_db#(virtual apb_if)::set(null, "uvm_test_top.env.apb_agt", "vif", apb_if);
+    
     run_test("");
   end
 
