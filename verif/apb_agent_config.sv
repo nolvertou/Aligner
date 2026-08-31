@@ -4,12 +4,18 @@
   class apb_agent_config extends uvm_component;
     `uvm_component_utils(apb_agent_config)
     
+    // Properties
     local apb_vif vif;
+    local uvm_active_passive_enum active_passive;
     
+    // Constructor
     function new(string name = "", uvm_component parent);
       super.new(name, parent);
+      
+      active_passive = UVM_ACTIVE; // Default value
     endfunction : new
     
+    // Getters / Setters
     virtual function apb_vif get_vif();
       return vif;
     endfunction : get_vif
@@ -23,6 +29,15 @@
       end
     endfunction : set_vif
     
+    virtual function uvm_active_passive_enum get_active_passive();
+      return active_passive;
+    endfunction : get_active_passive
+    
+    virtual function void set_active_passive(uvm_active_passive_enum value);
+      active_passive = value;
+    endfunction : set_active_passive
+    
+    // UVM Phases
     virtual function void start_of_simulation_phase(uvm_phase phase);
       super.start_of_simulation_phase(phase);
       
