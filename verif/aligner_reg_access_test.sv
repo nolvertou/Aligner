@@ -11,14 +11,16 @@
     virtual task run_phase(uvm_phase phase);
       phase.raise_objection(this, "TEST_DONE");
       `uvm_info("DEBUG", "Start of test", UVM_LOW)
-      #100ns;
+      #(105ns);
       
       fork
         // Stimulus with simple_seq
         begin
           apb_simple_sequence simple_seq = apb_simple_sequence::type_id::create("simple_seq");
           void'(simple_seq.randomize() with {
-            item.addr == 'h222;
+            item.addr == 'h0; // Address 0x000 provides access to the control register
+            item.dir == APB_WRITE;
+            item.data == 'h11;
           });
           simple_seq.start(env.apb_agt.apb_sqcr);
         end
@@ -27,7 +29,7 @@
         begin
           apb_rw_sequence rw_seq = apb_rw_sequence::type_id::create("rw_seq");
           void'(rw_seq.randomize() with {
-            addr == 'h4;
+            addr == 'hC; // Address 0xC provides access to the status register
             //wr_data == 'h65;
           });
           rw_seq.start(env.apb_agt.apb_sqcr);

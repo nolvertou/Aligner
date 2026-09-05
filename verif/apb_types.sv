@@ -13,7 +13,4 @@
   // APB Data
   typedef bit [`APB_MAX_DATA_WIDTH-1:0] apb_data;
 
-  // APB FSM State
-  typedef enum bit[1:0] {APB_IDLE, APB_SETUP, APB_ACCESS} apb_fsm_state;
-
 `endif // APB_TYPES_SV
