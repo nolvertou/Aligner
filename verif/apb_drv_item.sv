@@ -4,9 +4,6 @@
   class apb_drv_item extends apb_base_item;
     
     // Variables
-    rand apb_dir dir;
-    rand apb_addr addr;
-    rand apb_data data;
     rand int unsigned pre_drive_delay;
     rand int unsigned post_drive_delay;
     
@@ -28,7 +25,7 @@
     endfunction : new
     
     virtual function string convert2string();
-      string result = $sformatf("dir: %0s, addr: 0x%0x", dir.name(), addr);
+      string result = super.convert2string();
       
       if(dir == APB_WRITE) begin
         result = $sformatf("%0s, data: 0x%0x", result, data);

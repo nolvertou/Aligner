@@ -13,4 +13,7 @@
   // APB Data
   typedef bit [`APB_MAX_DATA_WIDTH-1:0] apb_data;
 
+  // APB Response
+typedef enum bit {APB_OK = 0, APB_ERR = 1} apb_response_e;
+
 `endif // APB_TYPES_SV
