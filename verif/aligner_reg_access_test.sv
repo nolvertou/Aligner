@@ -14,6 +14,12 @@
       #(105ns);
       
       fork
+        // Testing if a checker error shows up when test tries to change has_checks value directly in the interface
+        //begin
+        //  apb_vif vif = env.apb_agt.apb_agt_cfg.get_vif();
+        //  vif.has_checks = 0;
+        //end
+          
         // Stimulus with simple_seq
         begin
           apb_simple_sequence simple_seq = apb_simple_sequence::type_id::create("simple_seq");

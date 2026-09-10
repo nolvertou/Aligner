@@ -31,13 +31,11 @@
       apb_vif vif = apb_agt_cfg.get_vif();
       apb_mon_item item = apb_mon_item::type_id::create("item");
       
-      
       // Counting time befor setup phase
       while(vif.psel !== 1) begin : prev_delay_count
         @(posedge vif.pclk);
         item.prev_item_delay++;
       end
-      
       
       // Sampling info in setup phase
       item.addr = vif.paddr;
@@ -48,9 +46,7 @@
       end
       item.length = 1; // At this time it would be in clock cycle length 1
       /////////////////////
-      
-      
-      
+       
       // Counting time in acces phase
       @(posedge vif.pclk); 
       item.length++;
@@ -58,6 +54,12 @@
       while(vif.pready !== 1) begin
         @(posedge vif.pclk);
         item.length++;
+        
+        if(apb_agt_cfg.get_has_checks()) begin
+          if(item.length >=  apb_agt_cfg.get_stuck_threshold()) begin
+            `uvm_error("PROTOCOL_ERROR", $sformatf("The APB transfer reached the stuck threshold of %0d clock cycles", item.length ))
+          end
+        end
       end
       
       item.response = apb_response_e'(vif.pslverr);
@@ -68,7 +70,6 @@
       
       output_put.write(item);
       `uvm_info("DEBUG", $sformatf("Monitored item: %0s", item.convert2string()), UVM_NONE);
-      
       
       @(posedge vif.pclk);
       
