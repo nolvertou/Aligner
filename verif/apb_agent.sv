@@ -8,6 +8,7 @@
     apb_sequencer 		apb_sqcr;
     apb_driver 			apb_drv;
     apb_monitor			apb_mon;
+    apb_coverage        apb_cov;
     
     // UVM macros
     `uvm_component_utils(apb_agent)
@@ -23,6 +24,10 @@
       
       apb_agt_cfg = apb_agent_config::type_id::create("apb_agt_cfg", this);
       apb_mon = apb_monitor::type_id::create("apb_mon", this);
+      
+      if(apb_agt_cfg.get_has_coverage()) begin
+        apb_cov = apb_coverage::type_id::create("apb_cov", this);
+      end
       
       if(apb_agt_cfg.get_active_passive() == UVM_ACTIVE) begin
         apb_sqcr = apb_sequencer::type_id::create("apb_sqcr", this);
@@ -43,6 +48,11 @@
       end
       
       apb_mon.apb_agt_cfg = apb_agt_cfg;
+      
+      if(apb_agt_cfg.get_has_coverage()) begin
+        apb_cov.apb_agt_cfg = apb_agt_cfg;
+        apb_mon.output_put.connect(apb_cov.port_item);
+      end
       
       if(apb_agt_cfg.get_active_passive() == UVM_ACTIVE) begin
         apb_drv.apb_agt_cfg = apb_agt_cfg;

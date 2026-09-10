@@ -17,13 +17,17 @@
     // Number of clock cycles after which an APB transfer is consider suck and an error is triggered
     local int unsigned stuck_threshold;
     
+    // Switch to enable coverage
+    local bit has_coverage;
+    
     // Constructor
     function new(string name = "", uvm_component parent);
       super.new(name, parent);
       
       active_passive = UVM_ACTIVE; // Default value
       has_checks = 1;
-      stuck_threshold = 1000;	  // Default is 1000 cycles
+      stuck_threshold = 1000;	   // Default is 1000 cycles
+      has_coverage = 1;			   // Coverage is enabled by default
     endfunction : new
     
     // Getters / Setters
@@ -70,6 +74,19 @@
     virtual function int unsigned get_stuck_threshold();
       return stuck_threshold;
     endfunction : get_stuck_threshold
+    
+    virtual function void set_stuck_threshold(bit value);
+      stuck_threshold = value;
+    endfunction : set_stuck_threshold
+    
+    // GET/SET for has_coverage
+    virtual function bit get_has_coverage();
+      return has_coverage;
+    endfunction : get_has_coverage
+
+    virtual function void set_has_coverage(bit value);
+      has_coverage = value;
+    endfunction : set_has_coverage
 
     // UVM Phases
     virtual function void start_of_simulation_phase(uvm_phase phase);
