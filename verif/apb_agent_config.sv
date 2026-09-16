@@ -112,7 +112,21 @@
       end
     endtask : run_phase
   
-  
+    // Task for waiting the reset to start
+    virtual task wait_reset_start();
+      if(vif.preset_n !== 0) begin
+        // If preset_n is not exactly 0, wait for reset to become active
+        @(negedge vif.preset_n);
+      end
+    endtask : wait_reset_start
+    
+    
+    // Task for waiting the reset end
+    virtual task wait_reset_end();
+      while(vif.preset_n === 0) begin
+        @(posedge vif.pclk);
+      end
+    endtask : wait_reset_end
   
   endclass : apb_agent_config
 

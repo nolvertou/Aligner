@@ -1,11 +1,14 @@
 `ifndef APB_MONITOR_SV
 `define APB_MONITOR_SV
-  class apb_monitor extends uvm_monitor;
+  class apb_monitor extends uvm_monitor implements apb_reset_handler;
     // Handlers
     apb_agent_config apb_agt_cfg;
     
     // TLM ports
     uvm_analysis_port#(apb_mon_item) output_put;
+    
+    // Process for collect_transactions() task
+    protected process process_collect_transactions;
     
     // UVM macros
     `uvm_component_utils(apb_monitor)
@@ -18,14 +21,36 @@
     endfunction : new
     
     virtual task run_phase(uvm_phase phase);
-      collect_transactions();
+      forever begin
+        fork 
+          begin
+            wait_reset_end();
+        	collect_transactions();
+            disable fork;
+          end
+      	join 
+      end
     endtask : run_phase
     
     protected virtual task collect_transactions();
-      forever begin
-        collect_transaction();
-      end
+      fork 
+        begin
+          forever begin
+            process_collect_transactions = process::self();
+            collect_transaction();
+          end
+        end
+      join
     endtask : collect_transactions
+          
+    // Function to handle the reset
+    virtual function void handle_reset(uvm_phase phase);
+      if(process_collect_transactions != null) begin
+        process_collect_transactions.kill();
+        
+        process_collect_transactions = null;
+      end
+    endfunction 
     
     protected virtual task collect_transaction();
       apb_vif vif = apb_agt_cfg.get_vif();
@@ -74,6 +99,13 @@
       @(posedge vif.pclk);
       
     endtask : collect_transaction
+          
+    
+    // Task for waiting the reset end
+    virtual task wait_reset_end();
+      apb_agt_cfg.wait_reset_end();
+    endtask : wait_reset_end
+
   endclass : apb_monitor
 
 `endif // APB_MONITOR_SV

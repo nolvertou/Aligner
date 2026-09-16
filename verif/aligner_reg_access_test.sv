@@ -19,6 +19,22 @@
         //  apb_vif vif = env.apb_agt.apb_agt_cfg.get_vif();
         //  vif.has_checks = 0;
         //end
+        
+        // Reset
+        begin 
+          apb_vif vif = env.apb_agt.apb_agt_cfg.get_vif();
+          
+          repeat(3) begin
+            @(posedge vif.psel);
+          end
+          #(11ns);
+          vif.preset_n <= 0;
+          
+          repeat(4) begin
+            @(posedge vif.pclk);
+          end
+          vif.preset_n <= 1;
+        end
           
         // Stimulus with simple_seq
         begin
@@ -50,6 +66,17 @@
           random_seq.start(env.apb_agt.apb_sqcr);
         end
       join
+      
+      // Stimulus with random_seq
+      begin
+        apb_random_sequence random_seq = apb_random_sequence::type_id::create("random_seq");
+        void'(random_seq.randomize() with {
+          num_items == 3;
+        });
+        random_seq.start(env.apb_agt.apb_sqcr);
+      end
+      
+      #(100ns);
         
       `uvm_info("DEBUG", "End of test", UVM_LOW)
       phase.drop_objection(this, "TEST_DONE");

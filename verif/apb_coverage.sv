@@ -4,7 +4,7 @@
   // Analysis implementation declaration for item transactions
   `uvm_analysis_imp_decl(_item)
   
-  class apb_coverage extends uvm_component;
+  class apb_coverage extends uvm_component implements apb_reset_handler;
     
     // Handlers
     apb_agent_config apb_agt_cfg;
@@ -111,14 +111,11 @@
       wrap_cover_rd_data_1 = apb_cover_index_wrapper #(`APB_MAX_DATA_WIDTH)::type_id::create("wrap_cover_rd_data_1", this);
     endfunction : build_phase
     
-    virtual task run_phase(uvm_phase phase);
+    // Function to handle the reset
+    virtual function void handle_reset(uvm_phase phase);
       apb_vif vif = apb_agt_cfg.get_vif();
-      
-      forever begin
-        @(negedge vif.preset_n);
-        cover_reset.sample(vif.psel);
-      end
-    endtask : run_phase
+      cover_reset.sample(vif.psel);
+    endfunction : handle_reset
     
     // Other Methods
     // Function associated with port_item port

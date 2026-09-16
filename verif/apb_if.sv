@@ -11,7 +11,7 @@
 
   
   interface apb_if(input pclk);
-    logic preset_n;
+    logic preset_n;							// reset is asynchronous
     logic [`APB_MAX_ADDR_WIDTH-1:0] paddr;
     logic pwrite;
     logic psel;

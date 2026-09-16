@@ -26,7 +26,7 @@ module testbench();
   
   initial begin : reset_generator
     apb_if.preset_n = 1;
-    #6ns;
+    #3ns;
     apb_if.preset_n = 0;
     #30ns;
     apb_if.preset_n = 1;

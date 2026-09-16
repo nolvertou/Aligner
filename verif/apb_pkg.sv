@@ -7,6 +7,7 @@
   package apb_pkg;
     import uvm_pkg::*;
     `include "apb_types.sv"
+    `include "apb_reset_handler.sv"
     `include "apb_base_item.sv"
     `include "apb_drv_item.sv"
     `include "apb_mon_item.sv"

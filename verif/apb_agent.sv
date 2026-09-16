@@ -1,7 +1,7 @@
 `ifndef APB_AGENT_SV
   `define APB_AGENT_SV
   
-  class apb_agent extends uvm_agent;
+class apb_agent extends uvm_agent implements apb_reset_handler;
     
     // Handlers
     apb_agent_config 	apb_agt_cfg;
@@ -59,6 +59,46 @@
         apb_drv.seq_item_port.connect(apb_sqcr.seq_item_export);
       end
     endfunction : connect_phase
+  
+    virtual task run_phase(uvm_phase phase);
+      forever begin
+        wait_reset_start();
+        handle_reset(phase);
+        wait_reset_end();
+      end
+    endtask : run_phase
+  
+  
+    // Methods
+    virtual function void handle_reset(uvm_phase phase);
+      uvm_component children[$];
+      
+      // Get all the instantiated components under the apb_agent
+      get_children(children);
+      foreach(children[idx]) begin
+        apb_reset_handler reset_handler;
+        
+        //`uvm_info("CHILD", $sformatf("Child: %s", children[idx].get_name()), UVM_LOW)
+        if($cast(reset_handler, children[idx])) begin
+          reset_handler.handle_reset(phase);
+        end
+        else begin
+          `uvm_info("CHILD", $sformatf("Child: %s failed casting", children[idx].get_name()), UVM_LOW)
+        end
+      end
+      
+    endfunction : handle_reset
+  
+    // Task for waiting the reset to start
+    virtual task wait_reset_start();
+      apb_agt_cfg.wait_reset_start();
+    endtask : wait_reset_start
+    
+    
+    // Task for waiting the reset end
+    virtual task wait_reset_end();
+      apb_agt_cfg.wait_reset_end();
+    endtask : wait_reset_end
       
   endclass : apb_agent
 
