@@ -4,7 +4,7 @@
   class aligner_base_test extends uvm_test;
     `uvm_component_utils(aligner_base_test)
     
-    aligner_env env;
+    aligner_env#(`ALIGNER_DATA_WIDTH) env;
     
     function new(string name = "", uvm_component parent);
       super.new(name, parent);
@@ -13,7 +13,7 @@
     virtual function void build_phase(uvm_phase phase);
       super.build_phase(phase);
       
-      env = aligner_env::type_id::create("env", this);
+      env = aligner_env#(`ALIGNER_DATA_WIDTH)::type_id::create("env", this);
     endfunction : build_phase
     
   endclass : aligner_base_test

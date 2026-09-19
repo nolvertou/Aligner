@@ -3,10 +3,12 @@
 
   `include "uvm_macros.svh"
   `include "apb_pkg.sv"
+  `include "md_pkg.sv"
   
   package aligner_pkg;
     import uvm_pkg::*;
     import apb_pkg::*;
+    import md_pkg::*;
 
     `include "aligner_env.sv"
   endpackage : aligner_pkg

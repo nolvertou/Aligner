@@ -8,7 +8,8 @@
     import uvm_pkg::*; 
     import aligner_pkg::*;
     import apb_pkg::*;
-
+	
+	`include "aligner_test_defines.sv"
     `include "aligner_base_test.sv"
 	`include "aligner_reg_access_test.sv"
   endpackage : aligner_test_pkg
