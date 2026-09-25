@@ -1,13 +1,19 @@
 `ifndef MD_AGENT_SV
 `define MD_AGENT_SV
-  class md_agent#(int unsigned DATA_WIDTH = 32) extends uvm_agent implements md_reset_handler;
+  class md_agent#(int unsigned DATA_WIDTH = 32, type DRV_ITEM = md_drv_item) extends uvm_agent implements md_reset_handler;
     
     typedef virtual md_if#(DATA_WIDTH) md_vif;
     
     // Agent Configuration handler
     md_agent_config#(DATA_WIDTH) md_agt_cfg;
     
-    `uvm_component_param_utils(md_agent#(DATA_WIDTH))
+    // Sequencer handler
+    md_sequencer#(DRV_ITEM) md_sqcr;
+    
+    // Diver handler
+    md_driver#(DRV_ITEM) md_drv;
+    
+    `uvm_component_param_utils(md_agent#(DATA_WIDTH, DRV_ITEM))
     
     function new(string name = "", uvm_component parent);
       super.new(name, parent);
@@ -18,6 +24,11 @@
       super.build_phase(phase);
       
       md_agt_cfg = md_agent_config#(DATA_WIDTH)::type_id::create("md_agt_cfg", this);
+      
+      if(md_agt_cfg.get_active_passive() == UVM_ACTIVE) begin
+        md_sqcr = md_sequencer#(DRV_ITEM)::type_id::create("md_sqcr", this);
+        md_drv  = md_driver#(DRV_ITEM)::type_id::create("md_drv", this);
+      end
     endfunction : build_phase
     
     virtual function void connect_phase(uvm_phase phase);
@@ -31,7 +42,12 @@
       else begin
         md_agt_cfg.set_vif(vif);
       end
-   
+      
+      if(md_agt_cfg.get_active_passive() == UVM_ACTIVE) begin
+        md_drv.seq_item_port.connect(md_sqcr.seq_item_export);
+      end
+      md_drv.md_agt_cfg = md_agt_cfg;
+      
     endfunction : connect_phase
   
     virtual task run_phase(uvm_phase phase);
