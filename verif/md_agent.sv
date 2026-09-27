@@ -10,8 +10,11 @@
     // Sequencer handler
     md_sequencer#(DRV_ITEM) md_sqcr;
     
-    // Diver handler
+    // Driver handler
     md_driver#(DRV_ITEM) md_drv;
+    
+    // Monitor handler
+    md_monitor#(DATA_WIDTH) md_mon;
     
     `uvm_component_param_utils(md_agent#(DATA_WIDTH, DRV_ITEM))
     
@@ -24,6 +27,7 @@
       super.build_phase(phase);
       
       md_agt_cfg = md_agent_config#(DATA_WIDTH)::type_id::create("md_agt_cfg", this);
+      md_mon 	 = md_monitor#(DATA_WIDTH)::type_id::create("md_mon", this);
       
       if(md_agt_cfg.get_active_passive() == UVM_ACTIVE) begin
         md_sqcr = md_sequencer#(DRV_ITEM)::type_id::create("md_sqcr", this);
@@ -43,10 +47,12 @@
         md_agt_cfg.set_vif(vif);
       end
       
+      md_mon.md_agt_cfg = md_agt_cfg;
+      
       if(md_agt_cfg.get_active_passive() == UVM_ACTIVE) begin
         md_drv.seq_item_port.connect(md_sqcr.seq_item_export);
+        md_drv.md_agt_cfg = md_agt_cfg;
       end
-      md_drv.md_agt_cfg = md_agt_cfg;
       
     endfunction : connect_phase
   

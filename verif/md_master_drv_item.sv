@@ -46,13 +46,13 @@
       string data_as_string = "{";
       
       foreach(data[idx]) begin
-        data_as_string = $sformatf("%0s'h%02x%0s", data_as_string, data[idx], idx == data.size() - 1 ? "" : ", " ) ;
+        data_as_string = $sformatf("%0s'h%02x%0s", data_as_string, data[idx], (idx == data.size() - 1) ? "" : ", " ) ;
       end
       
       data_as_string = $sformatf("%0s}", data_as_string);
       
       return $sformatf("data: %0s, offset: %0d, pre_drive_delay: %0d, post_drive_delay: %0d", data_as_string, offset, pre_drive_delay, post_drive_delay);
-    endfunction : covert2string
+    endfunction : convert2string
 
   endclass : md_master_drv_item
 

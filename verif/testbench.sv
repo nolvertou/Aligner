@@ -5,7 +5,9 @@
  * Description:		UVM Testbench to validate aligner dut
  */
 
+`timescale 1ns/1ns
 `include "aligner_test_pkg.sv"
+
 module testbench();
   
   import uvm_pkg::*;

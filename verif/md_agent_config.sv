@@ -20,15 +20,19 @@
     // Switch to enable coverage
     local bit has_coverage;
     
+    // Delay used when detecting start of an MD transaction in the monitor
+    local time sample_delay_start_tr;
+    
     `uvm_component_param_utils(md_agent_config#(DATA_WIDTH))
     
     function new(string name = "", uvm_component parent);
       super.new(name, parent);
       
-      active_passive = UVM_ACTIVE; 	// Default value
-      has_checks = 1;				// Checks are enabled by default
-      stuck_threshold = 1000;	  	// Default is 1000 cycles
-      has_coverage = 1;			   	// Coverage is enabled by default
+      active_passive 		= UVM_ACTIVE; 	// Default value
+      has_checks 			= 1;			// Checks are enabled by default
+      stuck_threshold 		= 1000;	  		// Default is 1000 cycles
+      has_coverage 			= 1;			// Coverage is enabled by default
+      sample_delay_start_tr	= 1ns;
     endfunction : new
     
     // Run phase
@@ -82,6 +86,15 @@
         vif.has_checks = has_checks;
       end
     endfunction : set_has_checks
+    
+    // GET/SET for sample_delay_start_tr
+    virtual function time get_sample_delay_start_tr();
+      return sample_delay_start_tr;
+    endfunction : get_sample_delay_start_tr
+    
+    virtual function void set_sample_delay_start_tr(time value);
+      sample_delay_start_tr = value;
+    endfunction : set_sample_delay_start_tr
     
     // GET/SET for stuck_threshold
     virtual function int unsigned get_stuck_threshold();

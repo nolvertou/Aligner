@@ -51,6 +51,11 @@
         @(posedge vif.clk);
       end
       
+      vif.valid  <= 0;
+      vif.data   <= 0;
+      vif.offset <= 0;
+      vif.size   <= 0;
+      
       for(int i = 0; i < item.post_drive_delay; i++) begin
         @(posedge vif.clk);
       end
