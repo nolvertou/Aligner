@@ -1,7 +1,7 @@
 `ifndef MD_MASTER_SIMPLE_SEQUENCE_SV
 `define MD_MASTER_SIMPLE_SEQUENCE_SV
 
-  class md_master_simple_sequence extends md_base_sequence#(md_master_drv_item);
+  class md_master_simple_sequence extends md_master_base_sequence;
 	
     // Item to drive
     rand md_master_drv_item item;

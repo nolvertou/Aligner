@@ -12,6 +12,13 @@
       
       #(100ns);
       
+      fork
+        begin
+          md_slave_response_forever_sequence forever_seq = md_slave_response_forever_sequence::type_id::create("forever_seq");
+          forever_seq.start(env.md_tx_agt.md_sqcr);
+        end
+      join_none
+      
       repeat(4) begin
         md_master_simple_sequence simple_seq = md_master_simple_sequence::type_id::create("simple_seq");
         
@@ -22,7 +29,7 @@
         simple_seq.start(env.md_rx_agt.md_sqcr);
       end
       
-      #(100ns);
+      #(500ns);
       
       `uvm_info("DEBUG", "this is the end of the test", UVM_LOW)
       

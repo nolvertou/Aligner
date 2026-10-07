@@ -88,6 +88,8 @@
       // Sets the begin time to the current simulation time
       void'(begin_tr(item));
       
+      `uvm_info("DEBUG", $sformatf("Monitor started collecting item: %0s", item.convert2string()), UVM_NONE)
+      
       output_put.write(item);
       
       @(posedge vif.clk);
@@ -107,7 +109,6 @@
       output_put.write(item);
       
       `uvm_info("DEBUG", $sformatf("Monitored item: %0s", item.convert2string()), UVM_NONE)
-      
     endtask : collect_transaction
               
     // Task for waiting the reset end

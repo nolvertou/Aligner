@@ -1,7 +1,7 @@
 `ifndef MD_DRIVER_SV
 `define MD_DRIVER_SV
 
-  class md_driver#(type DRV_ITEM = md_drv_item) extends uvm_driver#(.REQ(DRV_ITEM));
+class md_driver#(type DRV_ITEM = md_drv_item) extends uvm_driver#(.REQ(DRV_ITEM)) implements md_reset_handler;
     
     // Handlers
     md_agent_config md_agt_cfg;
@@ -21,6 +21,7 @@
           begin
             wait_reset_end();
             drive_transactions();
+            
             disable fork;
           end
         join
@@ -42,7 +43,7 @@
       join
     endtask : drive_transactions
     
-          protected virtual task drive_transaction(DRV_ITEM item);
+    protected virtual task drive_transaction(DRV_ITEM item);
       `uvm_fatal("ALGORITHM ISSUE", "Implement drive_transaction()") 
     endtask : drive_transaction
     
@@ -57,7 +58,7 @@
     endfunction : handle_reset
   
     // Task for waiting the reset end
-    virtual task wait_reset_end();
+    protected virtual task wait_reset_end();
       md_agt_cfg.wait_reset_end();
     endtask : wait_reset_end
 

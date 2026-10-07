@@ -1,5 +1,5 @@
-`ifndef MD_MASTER_DRIVER
-`define MD_MASTER_DRIVER
+`ifndef MD_MASTER_DRIVER_SV
+`define MD_MASTER_DRIVER_SV
 
   class md_master_driver#(int unsigned DATA_WIDTH = 32) extends md_driver#(.DRV_ITEM(md_master_drv_item));
   
@@ -80,4 +80,4 @@
 
 
 
-`endif // MD_MASTER_DRIVER
+`endif // MD_MASTER_DRIVER_SV

@@ -8,7 +8,7 @@
     md_agent_config#(DATA_WIDTH) md_agt_cfg;
     
     // Sequencer handler
-    md_sequencer#(DRV_ITEM) md_sqcr;
+    md_base_sequencer#(DRV_ITEM) md_sqcr;
     
     // Driver handler
     md_driver#(DRV_ITEM) md_drv;
@@ -30,7 +30,7 @@
       md_mon 	 = md_monitor#(DATA_WIDTH)::type_id::create("md_mon", this);
       
       if(md_agt_cfg.get_active_passive() == UVM_ACTIVE) begin
-        md_sqcr = md_sequencer#(DRV_ITEM)::type_id::create("md_sqcr", this);
+        md_sqcr = md_base_sequencer#(DRV_ITEM)::type_id::create("md_sqcr", this);
         md_drv  = md_driver#(DRV_ITEM)::type_id::create("md_drv", this);
       end
     endfunction : build_phase

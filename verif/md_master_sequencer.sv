@@ -1,7 +1,7 @@
 `ifndef MD_MASTER_SEQUENCER_SV
 `define MD_MASTER_SEQUENCER_SV
 
-  class md_master_sequencer#(int unsigned DATA_WIDTH) extends md_sequencer#(.DRV_ITEM(md_master_drv_item));
+  class md_master_sequencer#(int unsigned DATA_WIDTH) extends md_master_base_sequencer;
   
     `uvm_component_param_utils(md_master_sequencer#(DATA_WIDTH))
     

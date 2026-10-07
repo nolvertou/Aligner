@@ -10,7 +10,7 @@
       
       // Override all md_agt_cfg instances under this component md_master_agent
       md_agent_config#(DATA_WIDTH)::type_id::set_inst_override(md_master_agent_config#(DATA_WIDTH)::get_type(), "md_agt_cfg", this);
-      md_sequencer#(md_master_drv_item)::type_id::set_inst_override(md_master_sequencer#(DATA_WIDTH)::get_type(), "md_sqcr", this);
+      md_base_sequencer#(md_master_drv_item)::type_id::set_inst_override(md_master_sequencer#(DATA_WIDTH)::get_type(), "md_sqcr", this);
       md_driver#(md_master_drv_item)::type_id::set_inst_override(md_master_driver#(DATA_WIDTH)::get_type(), "md_drv", this);
     endfunction : new
 
