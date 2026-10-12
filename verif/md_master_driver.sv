@@ -1,7 +1,7 @@
 `ifndef MD_MASTER_DRIVER_SV
 `define MD_MASTER_DRIVER_SV
 
-  class md_master_driver#(int unsigned DATA_WIDTH = 32) extends md_driver#(.DRV_ITEM(md_master_drv_item));
+  class md_master_driver#(int unsigned DATA_WIDTH = 32) extends md_driver#(.DATA_WIDTH(DATA_WIDTH), .DRV_ITEM(md_master_drv_item));
   
     typedef virtual md_if#(DATA_WIDTH) md_vif;
     
@@ -25,9 +25,10 @@
         @(posedge vif.clk);
       end
       
+      // Transaction starts
       vif.valid <= 1;
       
-      // // Pack data bytes into the bus at the specified offset.
+      // Pack data bytes into the bus at the specified offset.
       begin 
         bit[DATA_WIDTH-1:0] data = 0;
         
@@ -46,7 +47,7 @@
       
       @(posedge vif.clk);
       
-      
+      // Wait for ready to become high
       while(vif.ready !== 1 ) begin
         @(posedge vif.clk);
       end

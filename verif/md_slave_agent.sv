@@ -11,7 +11,7 @@
       // Override all md_agt_cfg instances under this component md_slave_agent
       md_agent_config#(DATA_WIDTH)::type_id::set_inst_override(md_slave_agent_config#(DATA_WIDTH)::get_type(), "md_agt_cfg", this);
       md_base_sequencer#(md_slave_drv_item)::type_id::set_inst_override(md_slave_sequencer#(DATA_WIDTH)::get_type(), "md_sqcr", this);
-      md_driver#(md_slave_drv_item)::type_id::set_inst_override(md_slave_driver#(DATA_WIDTH)::get_type(), "md_drv", this);
+      md_driver#(DATA_WIDTH, md_slave_drv_item)::type_id::set_inst_override(md_slave_driver#(DATA_WIDTH)::get_type(), "md_drv", this);
     endfunction : new
     
     virtual function void connect_phase(uvm_phase phase);

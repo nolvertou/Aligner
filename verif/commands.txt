@@ -1,0 +1,5 @@
+// Shows better the sva error in Synopsys VCS simulator
+// -assert svaext
+
+// +UVM_TESTNAME
+// +UVM_MAX_QUIT_COUNT=1

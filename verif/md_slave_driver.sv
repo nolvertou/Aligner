@@ -1,7 +1,7 @@
 `ifndef MD_SLAVE_DRIVER_SV
 `define MD_SLAVE_DRIVER_SV
 
-  class md_slave_driver#(int unsigned DATA_WIDTH = 32) extends md_driver#(.DRV_ITEM(md_slave_drv_item)) ;
+  class md_slave_driver#(int unsigned DATA_WIDTH = 32) extends md_driver#(.DATA_WIDTH(DATA_WIDTH), .DRV_ITEM(md_slave_drv_item)) ;
     
     typedef virtual md_if#(DATA_WIDTH) md_vif;
     

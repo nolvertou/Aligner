@@ -6,7 +6,7 @@
     typedef virtual md_if#(DATA_WIDTH) md_vif;
     
     // Handlers
-    md_agent_config md_agt_cfg;
+    md_agent_config#(DATA_WIDTH) md_agt_cfg;
     
     // TLM ports
     uvm_analysis_port#(md_mon_item) output_put;
@@ -98,6 +98,12 @@
       while(vif.ready !== 1) begin
         @(posedge vif.clk);
         item.length++;
+        
+        if(md_agt_cfg.get_has_checks()) begin
+          if(item.length >= md_agt_cfg.get_stuck_threshold()) begin 
+            `uvm_error("PROTOCOL_ERROR", $sformatf("The MD transfer reached the stuck threshold value of %0d", item.length))
+          end
+        end
       end
       
       // Here the item ended, and collect response information

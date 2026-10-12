@@ -14,6 +14,7 @@
     `include "aligner_base_test.sv"
 	`include "aligner_reg_access_test.sv"
   	`include "aligner_random_test.sv"
+	`include "aligner_random_fill_rx_fifo_test.sv"
   endpackage : aligner_test_pkg
 
 `endif // ALIGNER_TEST_PKG_SV

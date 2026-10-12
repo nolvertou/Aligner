@@ -1,15 +1,15 @@
 `ifndef MD_DRIVER_SV
 `define MD_DRIVER_SV
 
-class md_driver#(type DRV_ITEM = md_drv_item) extends uvm_driver#(.REQ(DRV_ITEM)) implements md_reset_handler;
+class md_driver#(int unsigned DATA_WIDTH = 32, type DRV_ITEM = md_drv_item) extends uvm_driver#(.REQ(DRV_ITEM)) implements md_reset_handler;
     
     // Handlers
-    md_agent_config md_agt_cfg;
+    md_agent_config#(DATA_WIDTH) md_agt_cfg;
     
     // Process for drive_transactions() task
     protected process process_drive_transactions;
     
-    `uvm_component_param_utils(md_driver#(DRV_ITEM))
+  `uvm_component_param_utils(md_driver#(DATA_WIDTH, DRV_ITEM))
     
     function new(string name = "", uvm_component parent);
       super.new(name, parent);
