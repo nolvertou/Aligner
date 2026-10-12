@@ -3,3 +3,6 @@
 
 // +UVM_TESTNAME
 // +UVM_MAX_QUIT_COUNT=1
+
+// -timescale 1ns/1ns 
+// -sysv -coverage functional

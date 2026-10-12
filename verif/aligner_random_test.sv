@@ -19,7 +19,7 @@
         end
       join_none
       
-      repeat(4) begin
+      repeat(100) begin
         md_master_simple_sequence simple_seq = md_master_simple_sequence::type_id::create("simple_seq");
         
         simple_seq.set_sequencer(env.md_rx_agt.md_sqcr);

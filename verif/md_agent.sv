@@ -16,6 +16,9 @@
     // Monitor handler
     md_monitor#(DATA_WIDTH) md_mon;
     
+    // Coverage handler
+    md_coverage#(DATA_WIDTH) md_cov;
+        
     `uvm_component_param_utils(md_agent#(DATA_WIDTH, DRV_ITEM))
     
     function new(string name = "", uvm_component parent);
@@ -28,6 +31,10 @@
       
       md_agt_cfg = md_agent_config#(DATA_WIDTH)::type_id::create("md_agt_cfg", this);
       md_mon 	 = md_monitor#(DATA_WIDTH)::type_id::create("md_mon", this);
+      
+      if(md_agt_cfg.get_has_coverage()) begin
+        md_cov 	= md_coverage#(DATA_WIDTH)::type_id::create("md_cov", this);
+      end
       
       if(md_agt_cfg.get_active_passive() == UVM_ACTIVE) begin
         md_sqcr = md_base_sequencer#(DRV_ITEM)::type_id::create("md_sqcr", this);
@@ -48,6 +55,11 @@
       end
       
       md_mon.md_agt_cfg = md_agt_cfg;
+      
+      if(md_agt_cfg.get_has_coverage()) begin
+        md_cov.md_agt_cfg = md_agt_cfg;
+        md_mon.output_put.connect(md_cov.port_item);
+      end
       
       if(md_agt_cfg.get_active_passive() == UVM_ACTIVE) begin
         md_drv.seq_item_port.connect(md_sqcr.seq_item_export);

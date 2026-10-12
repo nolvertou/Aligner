@@ -33,10 +33,10 @@
       
       data_as_string = $sformatf("%0s}", data_as_string);
       
-      return $sformatf("[%0t..%0s] data: %0s, offset: %0d, response: %0s, length: %0d, prev_item_delay: %0d", 
+      return $sformatf("[%0t..%0s] data: %0s, size: %0d, offset: %0d, response: %0s, length: %0d, prev_item_delay: %0d", 
                        get_begin_time(), 
                        is_active() ? "" : $sformatf("%0t", get_end_time()),
-                       data_as_string, offset, response.name(), length, prev_item_delay);
+                       data_as_string, data.size(), offset, response.name(), length, prev_item_delay);
     endfunction : convert2string
 
   endclass : md_mon_item
